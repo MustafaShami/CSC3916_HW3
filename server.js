@@ -88,6 +88,50 @@ router.post('/signin', function (req, res) {
 /** TODO
  * Add movie routes GET, PUT, DELETE
  */
+router.route('/movies')
+    .delete(authController.isAuthenticated, function (req, res) {
+            console.log(req.body);
+            res = res.status(200);
+            if (req.get('Content-Type')) {
+                res = res.type(req.get('Content-Type'));
+            }
+            var o = getJSONObjectForMovieRequirement(req);
+            res.json(o);
+        }
+    )
+    /** TODO
+     * Figure out how to validate the token from the signin
+     */
+    .put(authJwtController.isAuthenticated, function(req, res) {
+            console.log(req.body);
+            res = res.status(200);
+            if (req.get('Content-Type')) {
+                res = res.type(req.get('Content-Type'));
+            }
+            var o = getJSONObjectForMovieRequirement(req);
+            res.json(o);
+        }
+    )
+    .post(function (req, res) {
+            console.log(req.body);
+            res = res.status(200);
+            // if (req.get('Content-Type')) {
+            //     res = res.type(req.get('Content-Type'));
+            // }
+            var o = getJSONObjectForMovieRequirement(res.status, 'MOVIE SAVED', req);
+            res.json(o);
+        }
+    )
+    .get(function (req, res) {
+            console.log(req.body);
+            res = res.status(200);
+            // if (req.get('Content-Type')) {
+            //     res = res.type(req.get('Content-Type'));
+            // }
+            var o = getJSONObjectForMovieRequirement(res.status, 'GET MOVIES', req);
+            res.json(o);
+        }
+    );
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
