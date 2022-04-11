@@ -13,35 +13,22 @@ try {
 }
 mongoose.set('useCreateIndex', true);
 
-//user schema
 var MovieSchema = new Schema({
-    name: String,
-    username: { type: String, required: true, index: { unique: true }},
-    password: { type: String, required: true, select: false }
+    title: {String, required:true, index:{unique:true}},
+    yearReleased: {String, required:true},
+    genre:
+        {
+            String,
+            required:true,
+            enum: ["Action" , "Adventure" , "Comedy" , "Drama" , "Fantasy" , "Horror" , "Mystery" , "Thriller" , "Western"]
+        },
+    actors: //want to require 3 actors
+    [
+        {actorName: {String, required:true}, characterName:{String, required:true}},
+        {actorName: {String, required:true}, characterName:{String, required:true}},
+        {actorName: {String, required:true}, characterName:{String, required:true}}
+    ]
 });
 
-// UserSchema.pre('save', function(next) {
-//     var user = this;
-//
-//     //hash the password
-//     // if (!user.isModified('password')) return next();
-//
-//     bcrypt.hash(user.password, null, null, function(err, hash) {
-//         if (err) return next(err);
-//
-//         //change the password
-//         user.password = hash;
-//         next();
-//     });
-// });
-
-UserSchema.methods.comparePassword = function (password, callback) {
-    var user = this;
-
-    bcrypt.compare(password, user.password, function(err, isMatch) {
-        callback(isMatch);
-    })
-}
-
 //return the model to server
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Movie', MovieSchema);
