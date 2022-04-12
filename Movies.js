@@ -14,19 +14,19 @@ try {
 mongoose.set('useCreateIndex', true);
 
 var MovieSchema = new Schema({
-    title: {String, required:true, index:{unique:true}},
-    yearReleased: {String, required:true},
+    title: {type:String, required:true, index:{unique:true}},
+    yearReleased: {type:String, required:true},
     genre:
         {
-            String,
+            type:String,
             required:true,
             enum: ["Action" , "Adventure" , "Comedy" , "Drama" , "Fantasy" , "Horror" , "Mystery" , "Thriller" , "Western"]
         },
     actors: //want to require 3 actors
     [
-        {actorName: {String, required:true}, characterName:{String, required:true}},
-        {actorName: {String, required:true}, characterName:{String, required:true}},
-        {actorName: {String, required:true}, characterName:{String, required:true}}
+        {actorName: {type:String, required:true}, characterName:{type:String, required:true}},
+        {actorName: {type:String, required:true}, characterName:{type:String, required:true}},
+        {actorName: {type:String, required:true}, characterName:{type:String, required:true}}
     ]
 });
 
