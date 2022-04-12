@@ -23,24 +23,24 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
-//Don't need for this assignment because we want data from request body
-// function getJSONObjectForMovieRequirement(req) {
-//     var json = {
-//         headers: "No headers",
-//         key: process.env.UNIQUE_KEY,
-//         body: "No body"
-//     };
-//
-//     if (req.body != null) {
-//         json.body = req.body;
-//     }
-//
-//     if (req.headers != null) {
-//         json.headers = req.headers;
-//     }
-//
-//     return json;
-// }
+//I Don't think I need for this assignment because we want data from request body
+function getJSONObjectForMovieRequirement(req) {
+    var json = {
+        headers: "No headers",
+        key: process.env.UNIQUE_KEY,
+        body: "No body"
+    };
+
+    if (req.body != null) {
+        json.body = req.body;
+    }
+
+    if (req.headers != null) {
+        json.headers = req.headers;
+    }
+
+    return json;
+}
 
 router.post('/signup', function(req, res) {
     if (!req.body.username || !req.body.password) {
@@ -93,7 +93,7 @@ router.post('/signin', function (req, res) {
 router.route('/movies')
     //Enter Movie Information
     .post(authJwtController.isAuthenticated, function (req, res) {
-        if(!req.body.title || !req.body.released || !req.body.genre || !req.body.actors)// Check to make sure all necessary information was included
+        if(!req.body.title || !req.body.year || !req.body.genre || !req.body.actors)// Check to make sure all necessary information was included
         {
             res.status(400).json({success: false, message: 'Not enough information to save a movie. Include title, year released' +
                                                                           ' genre, and 3 actors'});
@@ -102,7 +102,7 @@ router.route('/movies')
         {
             var newMovie = new Movie();
             newMovie.title = req.body.title;
-            newMovie.yearReleased = req.body.year;
+            newMovie.year = req.body.year;
             newMovie.genre = req.body.genre;
             newMovie.actors = req.body.actors;
 
@@ -125,42 +125,42 @@ router.route('/movies')
         }
         }
     )
-    // Delete a Movie
-    .delete(authController.isAuthenticated, function (req, res) {
-            var movieToDelete = new Movie;
-
-            console.log(req.body);
-            res = res.status(200);
-            if (req.get('Content-Type')) {
-                res = res.type(req.get('Content-Type'));
-            }
-            var o = getJSONObjectForMovieRequirement(req);
-            res.json(o);
-        }
-    )
-
-    //Update Movie
-    .put(authJwtController.isAuthenticated, function(req, res) {
-            console.log(req.body);
-            res = res.status(200);
-            if (req.get('Content-Type')) {
-                res = res.type(req.get('Content-Type'));
-            }
-            var o = getJSONObjectForMovieRequirement(req);
-            res.json(o);
-        }
-    )
-    // Get list of Movies
-    .get(function (req, res) {
-            console.log(req.body);
-            res = res.status(200);
-            // if (req.get('Content-Type')) {
-            //     res = res.type(req.get('Content-Type'));
-            // }
-            var o = getJSONObjectForMovieRequirement(res.status, 'GET MOVIES', req);
-            res.json(o);
-        }
-    );
+    // // Delete a Movie
+    // .delete(authController.isAuthenticated, function (req, res) {
+    //         var movieToDelete = new Movie;
+    //
+    //         console.log(req.body);
+    //         res = res.status(200);
+    //         if (req.get('Content-Type')) {
+    //             res = res.type(req.get('Content-Type'));
+    //         }
+    //         var o = getJSONObjectForMovieRequirement(req);
+    //         res.json(o);
+    //     }
+    // )
+    //
+    // //Update Movie
+    // .put(authJwtController.isAuthenticated, function(req, res) {
+    //         console.log(req.body);
+    //         res = res.status(200);
+    //         if (req.get('Content-Type')) {
+    //             res = res.type(req.get('Content-Type'));
+    //         }
+    //         var o = getJSONObjectForMovieRequirement(req);
+    //         res.json(o);
+    //     }
+    // )
+    // // Get list of Movies
+    // .get(function (req, res) {
+    //         console.log(req.body);
+    //         res = res.status(200);
+    //         // if (req.get('Content-Type')) {
+    //         //     res = res.type(req.get('Content-Type'));
+    //         // }
+    //         var o = getJSONObjectForMovieRequirement(res.status, 'GET MOVIES', req);
+    //         res.json(o);
+    //     }
+    // );
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
