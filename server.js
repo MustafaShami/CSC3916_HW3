@@ -12,7 +12,7 @@ var authJwtController = require('./auth_jwt');
 var jwt = require('jsonwebtoken');
 var cors = require('cors');
 var User = require('./Users');
-//var Movie = require('./Movies');
+var Movie = require('./Movies');
 
 var app = express();
 app.use(cors());
@@ -23,23 +23,24 @@ app.use(passport.initialize());
 
 var router = express.Router();
 
-function getJSONObjectForMovieRequirement(req) {
-    var json = {
-        headers: "No headers",
-        key: process.env.UNIQUE_KEY,
-        body: "No body"
-    };
-
-    if (req.body != null) {
-        json.body = req.body;
-    }
-
-    if (req.headers != null) {
-        json.headers = req.headers;
-    }
-
-    return json;
-}
+//Don't need for this assignment because we want data from request body
+// function getJSONObjectForMovieRequirement(req) {
+//     var json = {
+//         headers: "No headers",
+//         key: process.env.UNIQUE_KEY,
+//         body: "No body"
+//     };
+//
+//     if (req.body != null) {
+//         json.body = req.body;
+//     }
+//
+//     if (req.headers != null) {
+//         json.headers = req.headers;
+//     }
+//
+//     return json;
+// }
 
 router.post('/signup', function(req, res) {
     if (!req.body.username || !req.body.password) {
@@ -52,7 +53,7 @@ router.post('/signup', function(req, res) {
 
         user.save(function(err){
             if (err) {
-                if (err.code == 11000)
+                if (err.code === 11000)
                     return res.json({ success: false, message: 'A user with that username already exists.'});
                 else
                     return res.json(err);
@@ -89,16 +90,39 @@ router.post('/signin', function (req, res) {
 /** TODO
  * Make movies routes go through database using the movie schema
  */
-router.route('/movies collection')
+router.route('/movies')
     //Enter Movie Information
-    .post(function (req, res) {
-            console.log(req.body);
-            res = res.status(200);
-            // if (req.get('Content-Type')) {
-            //     res = res.type(req.get('Content-Type'));
-            // }
-            var o = getJSONObjectForMovieRequirement(res.status, 'MOVIE SAVED', req);
-            res.json(o);
+    .post(authJwtController.isAuthenticated, function (req, res) {
+        if(!req.body.title || !req.body.released || !req.body.genre || !req.body.actors)// Check to make sure all necessary information was included
+        {
+            res.status(400).json({success: false, message: 'Not enough information to save a movie. Include title, year released' +
+                                                                          ' genre, and 3 actors'});
+        }
+        else
+        {
+            var newMovie = new Movie();
+            newMovie.title = req.body.title;
+            newMovie.released = req.body.released;
+            newMovie.genre = req.body.genre;
+            newMovie.actors = req.body.actors;
+
+            //save the new movie and check to make sure it was saved sucessfully
+
+            newMovie.save(function(err)
+            {
+                if(err)
+                {
+                    if (err.code === 11000)
+                    {return res.json({ success: false, message: 'A Movie with that title already stored'});}
+                    else
+                    {return res.json(err);}
+                }
+                else
+                {
+                    return res.status(200).json({success:true , message:'Movie Saved!'});
+                }
+            })
+        }
         }
     )
     // Delete a Movie
