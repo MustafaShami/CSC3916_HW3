@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var bcrypt = require('bcrypt-nodejs');
 
 mongoose.Promise = global.Promise;
 
@@ -15,12 +14,12 @@ mongoose.set('useCreateIndex', true);
 
 var MovieSchema = new Schema({
     title: {type:String, required:true, index:{unique:true}},
-    yearReleased: {type:String, required:true},
+    year: {type:String, required:true},
     genre:
         {
             type:String,
-            required:true,
-            enum: ["Action" , "Adventure" , "Comedy" , "Drama" , "Fantasy" , "Horror" , "Mystery" , "Thriller" , "Western"]
+            required:true
+            // , enum: ["Action" , "Adventure" , "Comedy" , "Drama" , "Fantasy" , "Horror" , "Mystery" , "Thriller" , "Western"]
         },
     actors: //want to require 3 actors
     [
