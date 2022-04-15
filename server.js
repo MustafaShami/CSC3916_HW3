@@ -202,37 +202,55 @@ router.route('/movies/*') //routes that require parameter of movie title
 
     // //Update Movie
     .put(authJwtController.isAuthenticated, function(req, res) {
-        Movie.find({title:req.params['0']}).exec(function (err, movie) //get movies from database
-        {
-            if(err) //check if error while getting movie from database
-            {
-                return res.json(err);
-            }
-            if(movie.length === 0) //check if there is movie in database
-            {
-                res.status(204).json({success:false , message:'There is no movie with that title in the database.'});
-            }
-            else if(movie.length >= 1)
-            {   //now that we know movie is in the database we can update it
-                Movie.updateOne({title:req.params['0']})
-                {
-                    title = req.body.title;
-                    year = req.body.year;
-                    genre = req.body.genre;
-                    actors = req.body.actors;
-                }
-
+        Movie.findOneAndUpdate({title: req.params['0']}, req.body, {new: true}, //new:true makes it so you return the UPDATED data instead of the before data
+            function (err) {
                 if(err)
                 {
-                    return res.json(err);
+                    res.status(400).json({success:false, message:'Failed to Update this movie.'});
                 }
                 else
                 {
-                    res.status(200).json({success:true , message:'Movie has been updated', movie});
+                    res.status(200).json({success:true , message:'Movie Updated!'});
                 }
-            }
         })
     })
+        // if(err)
+        // {
+        //     res.status(400).json({success:false , message: "Failed to update this movie."});
+        // }
+        // else
+        // )};
+
+        // Movie.find({title:req.params['0']}).exec(function (err, movie) //get movies from database
+        // {
+        //     if(err) //check if error while getting movie from database
+        //     {
+        //         return res.json(err);
+        //     }
+        //     if(movie.length === 0) //check if there is movie in database
+        //     {
+        //         res.status(204).json({success:false , message:'There is no movie with that title in the database.'});
+        //     }
+        //     else if(movie.length >= 1)
+        //     {   //now that we know movie is in the database we can update it
+        //         Movie.updateOne({title:req.params['0']})
+        //         {
+        //             title = req.body.title;
+        //             year = req.body.year;
+        //             genre = req.body.genre;
+        //             actors = req.body.actors;
+        //         }
+        //
+        //         if(err)
+        //         {
+        //             return res.json(err);
+        //         }
+        //         else
+        //         {
+        //             res.status(200).json({success:true , message:'Movie has been updated', movie});
+        //         }
+        //     }
+        // })
     // // Get list of Movies
     // .get(function (req, res) {
     //         console.log(req.body);
