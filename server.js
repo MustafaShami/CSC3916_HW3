@@ -53,7 +53,7 @@ router.post('/signup', function(req, res) {
 
         user.save(function(err){
             if (err) {
-                if (err.code === 11000)
+                if (err.code == 11000)
                     return res.json({ success: false, message: 'A user with that username already exists.'});
                 else
                     return res.json(err);
@@ -144,6 +144,7 @@ router.route('/movies')
         });
     });
 
+
 router.route('/movies/*') //routes that require parameter of movie title
     // Delete a Movie based on title
     .delete(authJwtController.isAuthenticated, function (req, res) {
@@ -214,54 +215,6 @@ router.route('/movies/*') //routes that require parameter of movie title
                 }
         });
     });
-        // if(err)
-        // {
-        //     res.status(400).json({success:false , message: "Failed to update this movie."});
-        // }
-        // else
-        // )};
-
-        // Movie.find({title:req.params['0']}).exec(function (err, movie) //get movies from database
-        // {
-        //     if(err) //check if error while getting movie from database
-        //     {
-        //         return res.json(err);
-        //     }
-        //     if(movie.length === 0) //check if there is movie in database
-        //     {
-        //         res.status(204).json({success:false , message:'There is no movie with that title in the database.'});
-        //     }
-        //     else if(movie.length >= 1)
-        //     {   //now that we know movie is in the database we can update it
-        //         Movie.updateOne({title:req.params['0']})
-        //         {
-        //             title = req.body.title;
-        //             year = req.body.year;
-        //             genre = req.body.genre;
-        //             actors = req.body.actors;
-        //         }
-        //
-        //         if(err)
-        //         {
-        //             return res.json(err);
-        //         }
-        //         else
-        //         {
-        //             res.status(200).json({success:true , message:'Movie has been updated', movie});
-        //         }
-        //     }
-        // })
-    // // Get list of Movies
-    // .get(function (req, res) {
-    //         console.log(req.body);
-    //         res = res.status(200);
-    //         // if (req.get('Content-Type')) {
-    //         //     res = res.type(req.get('Content-Type'));
-    //         // }
-    //         var o = getJSONObjectForMovieRequirement(res.status, 'GET MOVIES', req);
-    //         res.json(o);
-    //     }
-    // );
 
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
