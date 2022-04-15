@@ -129,18 +129,19 @@ router.route('/movies')
     .get(authJwtController.isAuthenticated, function (req, res) {
         Movie.find().exec(function (err, movies)
         {
-            if (req.get('Content-Type')) {
+            console.log(req.body);
+            if (req.get('Content-Type')) { //store movies from database into res variable
                 res = res.type(req.get('Content-Type'));
             }
 
-            if(movies.length === 0)
+            if(movies.length === 0) //check if there are any movies in the database
             {
                 res.status(204).json({success:false , message:'There are no movies in the database.'});
             }
             else if(movies.length >= 1)
             {
                 res.status(200).json({success:true , message:'Here is all the movies in the database.'})
-                res.json(movies);
+                res.json(movies); //return the list of movies
             }
         })
     })
