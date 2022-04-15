@@ -141,10 +141,10 @@ router.route('/movies')
             {   //return the list of movies
                 res.status(200).json({success:true , message:'Here is all the movies in the database.' , movies});
             }
-        })
+        });
     });
 
-router.route('/movies/title') //routes that require parameter of movie title
+router.route('/movies/*') //routes that require parameter of movie title
     // Delete a Movie based on title
     .delete(authController.isAuthenticated, function (req, res) {
         console.log(req.body);
@@ -153,7 +153,7 @@ router.route('/movies/title') //routes that require parameter of movie title
             res = res.type(req.get('Content-Type')); //initialize res variable to hold the correct type we want it to
         }
 
-        Movie.find({title: req.params.title}).exec(function (err, movie) { //find movie with the specific title given in the request parameter
+        Movie.find({title: req.params['0']}).exec(function (err, movie) { //find movie with the specific title given in the request parameter
             if(err)
             {
                 return res.json(err);
@@ -172,7 +172,7 @@ router.route('/movies/title') //routes that require parameter of movie title
                     else
                     {   //tell client the title of the movie that was deleted
                         var deletedMovie = getJSONObjectForMovieRequirement(req, ' Movie has been deleted from the database.');
-                        res.json(deletedMovie);
+                        res.status(200).json({success:true , message:'Movie Successfully Deleted' , deletedMovie});
                     }
                 })
             }
