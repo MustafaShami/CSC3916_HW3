@@ -100,20 +100,19 @@ router.route('/movies')
         }
         else
         {
-            var newMovie = new Movie();
+            var newMovie = new Movie(); //create new movie object and then assign it value from the request body
             newMovie.title = req.body.title;
             newMovie.year = req.body.year;
             newMovie.genre = req.body.genre;
             newMovie.actors = req.body.actors;
 
             //save the new movie and check to make sure it was saved sucessfully
-
             newMovie.save(function(err)
             {
                 if(err)
                 {
                     if (err.code === 11000)
-                    {return res.json({ success: false, message: 'A Movie with that title already stored'});}
+                    {return res.json({ success: false, message: 'A Movie with that title already stored.'});}
                     else
                     {return res.json(err);}
                 }
@@ -125,6 +124,22 @@ router.route('/movies')
         }
         }
     )
+
+    //Update Movie Information
+    .get(authJwtController.isAuthenticated, function (req, res) {
+        Movie.find().exec(function (err, movies)
+        {
+            if(movies.length === 0)
+            {
+                res.status(204).json({success:false , message:'There are no movies in the database.'});
+            }
+            else if(movies.length >= 1)
+            {
+                res.status(200).json({success:true , message:'Here is all the movies in the database.'})
+                res.json(movies);
+            }
+        })
+    })
     // // Delete a Movie
     // .delete(authController.isAuthenticated, function (req, res) {
     //         var movieToDelete = new Movie;
