@@ -145,7 +145,7 @@ router.route('/movies')
     });
 
 router.route('/movies/title') //routes that require parameter of movie title
-    // Delete a Movie
+    // Delete a Movie based on title
     .delete(authController.isAuthenticated, function (req, res) {
         console.log(req.body);
         res = res.status(200);
