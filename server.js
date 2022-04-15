@@ -164,7 +164,7 @@ router.route('/movies/*') //routes that require parameter of movie title
             }
             else
             {
-                Movie.deleteOne({title:req.params.title}).exec(function (err) { //delete movie with specific title , now that we know it exist in the database
+                Movie.remove({title:req.params['0']}).exec(function (err) { //delete movie with specific title , now that we know it exist in the database
                     if(err) //check if error when deleting from database
                     {
                         return res.json(err);
