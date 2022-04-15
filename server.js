@@ -129,6 +129,10 @@ router.route('/movies')
     .get(authJwtController.isAuthenticated, function (req, res) {
         Movie.find().exec(function (err, movies)
         {
+            if (req.get('Content-Type')) {
+                res = res.type(req.get('Content-Type'));
+            }
+
             if(movies.length === 0)
             {
                 res.status(204).json({success:false , message:'There are no movies in the database.'});
