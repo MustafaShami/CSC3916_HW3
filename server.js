@@ -181,6 +181,25 @@ router.route('/movies/*') //routes that require parameter of movie title
 
     })
 
+    // Get specific movie by passing title as parameter
+    .get(authJwtController.isAuthenticated, function (req, res) {
+        Movie.find({title:req.params['0']}).exec(function (err, movie) //get movies from database
+        {
+            if(err) //check if error while getting movie from database
+            {
+                return res.json(err);
+            }
+            if(movie.length === 0) //check if there is movie in database
+            {
+                res.status(204).json({success:false , message:'There is no movie with that title in the database.'});
+            }
+            else if(movie.length >= 1)
+            {   //return the list of movies
+                res.status(200).json({success:true , message:'Here is information about this movie.' , movie});
+            }
+        });
+    });
+
     // //Update Movie
     // .put(authJwtController.isAuthenticated, function(req, res) {
     //         console.log(req.body);
