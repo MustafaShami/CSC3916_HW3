@@ -127,21 +127,23 @@ router.route('/movies')
 
     //Update Movie Information
     .get(authJwtController.isAuthenticated, function (req, res) {
-        Movie.find().exec(function (err, movies)
+        // console.log(req.body);
+        // if (req.get('Content-Type')) {
+        //     res = res.type(req.get('Content-Type'));
+        // }
+        Movie.find().exec(function (err, movies) //get movies from database
         {
-            console.log(req.body);
-            if (req.get('Content-Type')) { //store movies from database into res variable
-                res = res.type(req.get('Content-Type'));
+            if(err) //check if error while getting movies from database
+            {
+                return res.json(err);
             }
-
             if(movies.length === 0) //check if there are any movies in the database
             {
                 res.status(204).json({success:false , message:'There are no movies in the database.'});
             }
             else if(movies.length >= 1)
-            {
-                res.status(200).json({success:true , message:'Here is all the movies in the database.'})
-                res.json(movies); //return the list of movies
+            {   //return the list of movies
+                res.status(200).json({success:true , message:'Here is all the movies in the database.' , movies})
             }
         })
     })
