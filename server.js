@@ -111,7 +111,7 @@ router.route('/movies')
             {
                 if(err)
                 {
-                    if (err.code === 11000)
+                    if (err.code == 11000)
                     {return res.json({ success: false, message: 'A Movie with that title already stored.'});}
                     else
                     {return res.json(err);}
@@ -133,7 +133,7 @@ router.route('/movies')
             {
                 return res.json(err);
             }
-            if(movies.length === 0) //check if there are any movies in the database
+            if(movies.length == 0) //check if there are any movies in the database
             {
                 res.status(204).json({success:false , message:'There are no movies in the database.'});
             }
@@ -159,7 +159,7 @@ router.route('/movies/*') //routes that require parameter of movie title
             {
                 return res.json(err);
             }
-            if(movie.length === 0)
+            if(movie.length == 0)
             {
                 res.status(204).json({success:false , message:'There is no movie with that title in the database.'});
             }
@@ -190,7 +190,7 @@ router.route('/movies/*') //routes that require parameter of movie title
             {
                 return res.json(err);
             }
-            if(movie.length === 0) //check if there is movie in database
+            if(movie.length == 0) //check if there is movie in database
             {
                 res.status(204).json({success:false , message:'There is no movie with that title in the database.'});
             }
