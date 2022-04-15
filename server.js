@@ -125,12 +125,8 @@ router.route('/movies')
         }
     )
 
-    //Update Movie Information
+    //Get All Movies in the database
     .get(authJwtController.isAuthenticated, function (req, res) {
-        // console.log(req.body);
-        // if (req.get('Content-Type')) {
-        //     res = res.type(req.get('Content-Type'));
-        // }
         Movie.find().exec(function (err, movies) //get movies from database
         {
             if(err) //check if error while getting movies from database
@@ -143,24 +139,48 @@ router.route('/movies')
             }
             else if(movies.length >= 1)
             {   //return the list of movies
-                res.status(200).json({success:true , message:'Here is all the movies in the database.' , movies})
+                res.status(200).json({success:true , message:'Here is all the movies in the database.' , movies});
             }
         })
+    });
+
+router.route('/movies/title') //routes that require parameter of movie title
+    // Delete a Movie
+    .delete(authController.isAuthenticated, function (req, res) {
+        console.log(req.body);
+        res = res.status(200);
+        if (req.get('Content-Type')) {
+            res = res.type(req.get('Content-Type')); //initialize res variable to hold the correct type we want it to
+        }
+
+        Movie.find({title: req.params.title}).exec(function (err, movie) { //find movie with the specific title given in the request parameter
+            if(err)
+            {
+                return res.json(err);
+            }
+            if(movie.length === 0)
+            {
+                res.status(204).json({success:false , message:'There is no movie with that title in the database.'});
+            }
+            else
+            {
+                Movie.deleteOne({title:req.params.title}).exec(function (err) { //delete movie with specific title , now that we know it exist in the database
+                    if(err) //check if error when deleting from database
+                    {
+                        return res.json(err);
+                    }
+                    else
+                    {   //tell client the title of the movie that was deleted
+                        var deletedMovie = getJSONObjectForMovieRequirement(req, ' Movie has been deleted from the database.');
+                        res.json(deletedMovie);
+                    }
+                })
+            }
+
+        })
+
     })
-    // // Delete a Movie
-    // .delete(authController.isAuthenticated, function (req, res) {
-    //         var movieToDelete = new Movie;
-    //
-    //         console.log(req.body);
-    //         res = res.status(200);
-    //         if (req.get('Content-Type')) {
-    //             res = res.type(req.get('Content-Type'));
-    //         }
-    //         var o = getJSONObjectForMovieRequirement(req);
-    //         res.json(o);
-    //     }
-    // )
-    //
+
     // //Update Movie
     // .put(authJwtController.isAuthenticated, function(req, res) {
     //         console.log(req.body);
