@@ -195,7 +195,7 @@ router.route('/movies/*') //routes that require parameter of movie title
             }
             else if(movie.length >= 1)
             {   //return the list of movies
-                res.status(200).json({success:true , message:'Here is information about this movie.' + movie.title ,movie});
+                res.status(200).json({success:true , message:'Here is information about this movie.' , movie});
             }
         });
     });
