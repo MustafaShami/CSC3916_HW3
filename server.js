@@ -93,7 +93,8 @@ router.post('/signin', function (req, res) {
 router.route('/movies')
     //Enter Movie Information
     .post(authJwtController.isAuthenticated, function (req, res) {
-        if(!req.body.title || !req.body.year || !req.body.genre || !req.body.actors)// Check to make sure all necessary information was included
+        if(!req.body.title || !req.body.year || !req.body.genre || !req.body.actors
+                                                    || req.body.actors.length < 3)// Check to make sure all necessary information was included
         {
             res.status(400).json({success: false, message: 'Not enough information to save a movie. Include title, year released' +
                                                                           ' genre, and 3 actors'});
