@@ -131,8 +131,8 @@ router.route('/movies')
         {
             if(err) //check if error while getting movies from database
             {
-                //return res.json(err);
-                res.status(204).json({success:false , message:'There is no movie with that title in the database.'}, err);
+                return res.json(err);
+                //res.status(204).json({success:false , message:'There is no movie with that title in the database.'}, err);
             }
             // if(movies.length == 0) //check if there are any movies in the database
             // {
@@ -158,8 +158,8 @@ router.route('/movies/*') //routes that require parameter of movie title
         Movie.find({title: req.params['0']}).exec(function (err, movie) { //find movie with the specific title given in the request parameter
             if(err)
             {
-                //return res.json(err);
-                res.status(204).json({success:false , message:'There is no movie with that title in the database.'}, err);
+                return res.json(err);
+                //res.status(204).json({success:false , message:'There is no movie with that title in the database.'}, err);
             }
             // if(movie.length == 0)
             // {
@@ -190,8 +190,8 @@ router.route('/movies/*') //routes that require parameter of movie title
         {
             if(err) //check if error while getting movie from database
             {
-                //return res.json(err);
-                res.status(204).json({success:false , message:'There is no movie with that title in the database.'}, err);
+                return res.json(err);
+                //res.status(204).json({success:false , message:'There is no movie with that title in the database.'}, err);
             }
             // if(movie.length == 0) //check if there is movie in database
             // {
